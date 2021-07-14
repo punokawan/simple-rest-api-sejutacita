@@ -16,10 +16,12 @@ const userController = {
     },
     getUser: async (req, res, next)=>{
         try {
-            const username = 'admin';
+            const {username} = req.decodedToken.user;
             const user = await userService.getUserByUsername(username);
 
-            return responseFormatter.success({res, data: user, message: 'Berhasil Mendapatkan data'});
+            const data = user
+
+            return responseFormatter.success({res, data, message: 'Berhasil Mendapatkan data'});
         } catch (error) {
             return responseFormatter.error({res, message: error.message});
         }
@@ -76,7 +78,7 @@ const userController = {
             console.log(req.body);
 
             const dataUser = {}
-            
+
             username? dataUser.username = username : '';
             password? dataUser.password = bcrypt.hashSync(password, saltRounds) : '';
             (role === 'user' || role === 'admin')? dataUser.role = role : '';

@@ -31,7 +31,7 @@ const userService = {
         )
         console.log({user});
         return user;
-    }
+    },
 }
 
 module.exports = userService;

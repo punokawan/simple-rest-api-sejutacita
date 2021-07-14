@@ -40,6 +40,16 @@ responseFormatter.forbidden = ({ res, data = null, status = 'FORBIDDEN', message
     res.status(response.code).json(response);
 };
 
+responseFormatter.methodNotAllowed = ({ res, data = null, status = 'METHOD_NOT ALLOWED', message = 'Method not allowed' }) => {
+    const response = {
+        code: 405,
+        status,
+        message,
+    };
+
+    res.status(response.code).json(response);
+};
+
 responseFormatter.unauthorized = ({ res, data = null, status = 'UNAUTHORIZED', message = 'unauthorized' }) => {
     const response = {
         code: 401,

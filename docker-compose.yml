@@ -23,7 +23,7 @@ services:
     volumes:
         - ./mongo-seed:/data
     command:
-        "mongoimport --host server_mongo_database --port 27017 --authenticationDatabase admin --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD} --db sejuta_cita -c users --upsert --upsertFields role,password --type json --file /data/init.json --jsonArray"
+        "mongoimport --host server_mongo_database --port 27017 --authenticationDatabase admin --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD} --db sejuta_cita -c users --type json --file /data/init.json --jsonArray"
 
   mongo-express-sejutacita:
     image: mongo-express

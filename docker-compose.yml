@@ -36,6 +36,7 @@ services:
       - ./controllers:/srv/rest-api-sejutacita/controllers
       - ./middlewares:/srv/rest-api-sejutacita/middlewares
       - ./services:/srv/rest-api-sejutacita/services
+      - ./public:/srv/rest-api-sejutacita/public
       - ./views:/srv/rest-api-sejutacita/views
       - ./app.js:/srv/rest-api-sejutacita/app.js
       - ./models:/srv/rest-api-sejutacita/models

@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  server_mongo_database:
+    image: mongo:latest
+    container_name: server_mongo_database_sejutacita
+    env_file:
+      - .env
+    volumes:
+      - ./mongo_data:/data
+    restart: always
+    ports:
+      - "27017:27017"
+
+  mongo-express-sejutacita:
+    image: mongo-express
+    container_name: mongo-express-sejutacita
+    restart: always
+    ports:
+        - 8081:8081
+    environment:
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+        - ME_CONFIG_MONGODB_SERVER=${MONGO_CONTAINER_NAME}
+
+  server-rest-api-sejutacita:
+    container_name: server-rest-api-sejutacita
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    env_file:
+      - .env
+    volumes:
+      - ./routes:/srv/rest-api-sejutacita/routes
+      - ./helpers:/srv/rest-api-sejutacita/helpers
+      - ./controllers:/srv/rest-api-sejutacita/controllers
+      - ./middlewares:/srv/rest-api-sejutacita/middlewares
+      - ./services:/srv/rest-api-sejutacita/services
+      - ./views:/srv/rest-api-sejutacita/views
+      - ./app.js:/srv/rest-api-sejutacita/app.js
+      - ./models:/srv/rest-api-sejutacita/models
+    restart: always
+    environment:
+      WAIT_HOSTS: server_mongo_database_sejutacita:27017
+    ports:
+      - "${PORT}:${PORT}"

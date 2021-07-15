@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const responseFormatter = require('./helpers/responseFormatter');
 
 var app = express();
 
@@ -23,12 +24,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // const uri = process.env.MONGO_URI;
-console.log(process.env.MONGO_INITDB_ROOT_USERNAME)
-console.log(process.env.MONGO_INITDB_ROOT_PASSWORD)
-console.log(process.env.MONGO_CONTAINER_NAME)
-console.log(process.env.MONGO_INITDB_DATABASE)
-// const uri = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER_NAME}/${process.env.MONGO_INITDB_DATABASE}?authMechanism=SCRAM-SHA-1&authSource=admin`;
-const uri = `mongodb://rootuser:rootpass@localhost:27017/sejuta_cita?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false`;
+
+const uri = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${process.env.MONGO_CONTAINER_NAME}/${process.env.MONGO_INITDB_DATABASE}?authMechanism=SCRAM-SHA-1&authSource=admin`;
+// const uri = `mongodb://rootuser:rootpass@localhost:27017/sejuta_cita?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false`;
 const option = {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -46,6 +44,9 @@ connection.once("open", () => {
 });
 
 app.use('/', indexRouter);
+app.get('/ping', (req, res, next) => {
+  return responseFormatter.success({res, message: 'pong'})
+})
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -63,5 +64,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+const port = process.env.PORT || 4500;
+app.listen(port, () => console.log(`listen on ${port}`));
 
 module.exports = app;
